@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PearPhone - The Slap Widget</title>
+  <style>
+    :root {
+      --pear-body: #ff5588;
+      --pear-accent: #ff88aa;
+      --pear-glow: #ffffff;
+      --screen-bg: #f4f4f9;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* Outer PearPhone Frame */
+    .pear-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Pear Stem */
+    .pear-stem {
+      width: 14px;
+      height: 28px;
+      background: #5c3a21;
+      border-radius: 10px 10px 0 0;
+      margin-bottom: -6px;
+      z-index: 1;
+      box-shadow: inset -2px 0 4px rgba(0,0,0,0.3);
+    }
+
+    /* Pear Body Silhouette */
+    .pear-phone {
+      width: 320px;
+      height: 580px;
+      background: linear-gradient(145deg, var(--pear-body), #d6336c);
+      border-radius: 120px 120px 160px 160px / 180px 180px 220px 220px;
+      padding: 40px 20px 30px 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 4px 8px rgba(255, 255, 255, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Pear Logo on the Back / Top Accent */
+    .pear-logo {
+      width: 24px;
+      height: 28px;
+      background: #ffffff;
+      clip-path: polygon(50% 0%, 80% 30%, 100% 70%, 75% 100%, 25% 100%, 0% 70%, 20% 30%);
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+      animation: pearPulse 2s infinite alternate;
+    }
+
+    @keyframes pearPulse {
+      from { filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.6)); }
+      to { filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1)); }
+    }
+
+    /* Inverted Pear Shaped Screen */
+    .pear-screen {
+      width: 100%;
+      height: 440px;
+      background: var(--screen-bg);
+      border-radius: 80px 80px 120px 120px / 120px 120px 160px 160px;
+      border: 4px solid #111;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    /* Hide scrollbar for clean UI */
+    .pear-screen::-webkit-scrollbar {
+      width: 4px;
+    }
+    .pear-screen::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 4px;
+    }
+
+    /* The Slap Header */
+    .slap-header {
+      text-align: center;
+      background: #7a288a;
+      color: #fff;
+      padding: 8px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    /* Post Creator Controls */
+    .post-box {
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .post-box textarea {
+      width: 100%;
+      height: 50px;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 6px;
+      resize: none;
+      outline: none;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    select, input[type="color"] {
+      width: 100%;
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 0.8rem;
+    }
+
+    .color-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.75rem;
+      color: #555;
+    }
+
+    .btn-slap {
+      background: #e91e63;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-slap:hover {
+      background: #c2185b;
+    }
+
+    /* Feed & Posts */
+    .feed {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .post-card {
+      background: #fff;
+      padding: 10px;
+      border-radius: 10px;
+      border-left: 4px solid #7a288a;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      word-wrap: break-word;
+    }
+
+    .post-mood {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #e91e63;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .post-time {
+      font-size: 0.65rem;
+      color: #999;
+      margin-top: 6px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="pear-wrapper">
+    <!-- Pear Stem -->
+    <div class="pear-stem"></div>
+
+    <!-- Pear Body -->
+    <div class="pear-phone">
+      <!-- Illuminated Pear Logo -->
+      <div class="pear-logo" title="Pear OS"></div>
+
+      <!-- Pear Screen -->
+      <div class="pear-screen">
+        <div class="slap-header">The Slap</div>
+
+        <!-- Create Post Area -->
+        <div class="post-box">
+          <textarea id="statusInput" placeholder="O que você está fazendo?"></textarea>
+
+          <div class="controls-grid">
+            <select id="moodSelect">
+              <option value="😃 Sentindo-se: Contente">😃 Contente</option>
+              <option value="😱 Sentindo-se: Desesperada(o)">😱 Desesperada(o)</option>
+              <option value="😎 Sentindo-se: Relevante">😎 Relevante</option>
+              <option value="🎭 Sentindo-se: Dramática(o)">🎭 Dramática(o)</option>
+              <option value="🍕 Sentindo-se: Com Fome">🍕 Com Fome</option>
+            </select>
+
+            <select id="fontSelect">
+              <option value="'Segoe UI', sans-serif">Padrão</option>
+              <option value="'Comic Sans MS', cursive">Comic</option>
+              <option value="'Impact', sans-serif">Impact</option>
+              <option value="'Courier New', monospace">Código</option>
+            </select>
+
+            <select id="fontSizeSelect">
+              <option value="0.9rem">Texto Médio</option>
+              <option value="0.75rem">Texto Pequeno</option>
+              <option value="1.1rem">Texto Grande</option>
+            </select>
+
+            <div class="color-picker-wrapper">
+              <label for="textColor">Cor:</label>
+              <input type="color" id="textColor" value="#333333">
+            </div>
+          </div>
+
+          <button class="btn-slap" onclick="addPost()">Postar no Slap!</button>
+        </div>
+
+        <!-- Feed Area -->
+        <div class="feed" id="feed">
+          <!-- Post de Exemplo -->
+          <div class="post-card">
+            <div class="post-mood">😱 Sentindo-se: Desesperada</div>
+            <div style="font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; color: #333;">
+              Tori Vega está atrasada para a aula de atuação!
+            </div>
+            <div class="post-time">há 2 min</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function addPost() {
+      const statusText = document.getElementById('statusInput').value.trim();
+      const mood = document.getElementById('moodSelect').value;
+      const font = document.getElementById('fontSelect').value;
+      const fontSize = document.getElementById('fontSizeSelect').value;
+      const color = document.getElementById('textColor').value;
+
+      if (!statusText) {
+        alert('Escreva algo para postar!');
+        return;
+      }
+
+      const feed = document.getElementById('feed');
+
+      const postCard = document.createElement('div');
+      postCard.className = 'post-card';
+
+      postCard.innerHTML = `
+        <div class="post-mood">${mood}</div>
+        <div style="font-family: ${font}; font-size: ${fontSize}; color: ${color};">
+          ${escapeHtml(statusText)}
+        </div>
+        <div class="post-time">Agora mesmo</div>
+      `;
+
+      feed.prepend(postCard);
+
+      // Limpar formulário
+      document.getElementById('statusInput').value = '';
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
